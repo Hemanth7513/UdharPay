@@ -43,6 +43,10 @@ function formatINR(amount: number) {
   return `₹${amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/RootNavigator';
+
 // ─── Dashboard Component ──────────────────────────────────────────────────────
 interface DashboardProps {
   transactions: Transaction[];
@@ -51,6 +55,7 @@ interface DashboardProps {
 
 function Dashboard({ transactions, buyers }: DashboardProps) {
   const [showAddEntry, setShowAddEntry] = useState(false);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const totalOutstanding = transactions
     .filter(t => t.status === 'unpaid' || t.status === 'partial')
@@ -132,7 +137,12 @@ function Dashboard({ transactions, buyers }: DashboardProps) {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Top Defaulters</Text>
             {buyerTotals.map(({ buyer, total }, index) => (
-              <View key={buyer.id} style={styles.defaulterRow}>
+              <TouchableOpacity 
+                key={buyer.id} 
+                style={styles.defaulterRow}
+                onPress={() => navigation.navigate('BuyerDetail', { buyerId: buyer.id })}
+                activeOpacity={0.8}
+              >
                 <View style={styles.defaulterRank}>
                   <Text style={styles.rankText}>{index + 1}</Text>
                 </View>
@@ -141,7 +151,7 @@ function Dashboard({ transactions, buyers }: DashboardProps) {
                   <Text style={styles.defaulterPhone}>{buyer.buyerPhone}</Text>
                 </View>
                 <Text style={styles.defaulterAmount}>{formatINR(total)}</Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         )}

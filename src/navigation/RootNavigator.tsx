@@ -5,11 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useAuthStore } from '../store/authStore';
 import { AppTabs } from './AppTabs';
 import { OnboardingScreen } from '../screens/OnboardingScreen';
+import { BuyerDetailScreen } from '../screens/BuyerDetailScreen';
 import { Colors } from '../theme';
 
 export type RootStackParamList = {
   Onboarding: undefined;
   AppTabs: undefined;
+  BuyerDetail: { buyerId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -54,7 +56,10 @@ export function RootNavigator() {
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isOnboarded ? (
-          <Stack.Screen name="AppTabs" component={AppTabs} />
+          <>
+            <Stack.Screen name="AppTabs" component={AppTabs} />
+            <Stack.Screen name="BuyerDetail" component={BuyerDetailScreen} />
+          </>
         ) : (
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         )}
