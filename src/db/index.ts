@@ -8,7 +8,7 @@ const adapter = new SQLiteAdapter({
   schema: dbSchema,
   dbName: 'udharpay',
   // migrations: [], // add migration specs as schema evolves
-  jsi: true, // JSI for better performance
+  jsi: false, // Disable JSI for Expo Go — re-enable for production EAS build
   onSetUpError: error => {
     console.error('[WatermelonDB] Setup error:', error);
   },
